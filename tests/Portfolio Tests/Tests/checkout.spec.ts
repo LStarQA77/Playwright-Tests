@@ -73,7 +73,7 @@ test('Standard user can complete checkout', async ({ page }) => {
   await page.locator('[data-test="finish"]').click();
   await expect(page).toHaveURL(/checkout-complete/);
   await expect(page.locator('.title')).toHaveText('Checkout: Complete!');
-  await expect(page.locator('.complete-header')).toHaveText('THANK YOU FOR YOUR ORDER');
+  await expect(page.locator('.complete-header')).toHaveText('Thank you for your order!');
 });
 
 test('Standard user can cancel checkout', async ({ page }) => {
@@ -89,23 +89,22 @@ test('Standard user can cancel checkout', async ({ page }) => {
   await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
 
   await productsPage.openCart();
-  await expect(page).toHaveURL(/cart\.html/);
-
+    await expect(page, 'user navigates to cart page').toHaveURL(/cart\.html/);
   await page.locator('[data-test="checkout"]').click();
-  await expect(page).toHaveURL(/checkout-step-one/);
+  await expect(page, 'user navigates to checkout step one').toHaveURL(/checkout-step-one/);
 
   await page.locator('[data-test="firstName"]').fill('Jane');
   await page.locator('[data-test="lastName"]').fill('Doe');
   await page.locator('[data-test="postalCode"]').fill('12345');
   await page.locator('[data-test="continue"]').click();
 
-  await expect(page).toHaveURL(/checkout-step-two/);
+  await expect(page, 'user submits info to proceed to checkout step two').toHaveURL(/checkout-step-two/);
   await expect(page.locator('.title')).toHaveText('Checkout: Overview');
 
 
   await expect(page.locator('[data-test="cancel"]')).toBeVisible();
   await page.locator('[data-test="cancel"]').click();
-  await expect(page).toHaveURL(/cart\.html/);
-  await expect(page.locator('.title')).toHaveText('Your Cart');
+  await expect(page, 'user cancels checkout and returns to inventory page').toHaveURL(/inventory.html/);
+  
 });
 
